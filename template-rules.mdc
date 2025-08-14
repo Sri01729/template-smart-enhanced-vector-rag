@@ -1,0 +1,125 @@
+---
+description: Mastra template development guidelines following official Mastra template structure and best practices
+globs: **/*.ts, **/*.tsx, **/*.json, **/*.md
+alwaysApply: true
+---
+
+# Mastra Template Development Rules
+
+## **Official Mastra Template Requirements**
+
+### **Project Structure (MANDATORY)**
+- **Mastra code location**: ALL Mastra code MUST be in `src/mastra/` directory
+- **Component organization**:
+  - Agents: `src/mastra/agents/`
+  - Tools: `src/mastra/tools/`
+  - Workflows: `src/mastra/workflows/`
+  - Main config: `src/mastra/index.ts`
+
+### **TypeScript Configuration (MANDATORY)**
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}
+```
+
+### **Package.json Requirements (MANDATORY)**
+- Use `template-*` naming convention
+- Set `"type": "module"` for ES modules
+- Support Node.js 18 and higher
+- Include standard scripts: `dev`, `build`, `start`
+
+### **Environment Configuration (MANDATORY)**
+- Include comprehensive `.env.example` file
+- Document ALL required API keys
+- Provide clear setup instructions
+
+### **Compatibility Requirements (MANDATORY)**
+- **Single projects** - NOT monorepos with multiple applications
+- **Framework-free** - NO Next.js, Express, or other web framework boilerplate
+- **Mastra-focused** - Demonstrate Mastra functionality without additional layers
+- **Mergeable** - Structure code for easy integration into existing projects
+- **Node.js compatible** - Support Node.js 18 and higher
+- **ESM modules** - Use ES modules (`"type": "module"` in package.json)
+  ```typescript
+  import { Mastra } from '@mastra/core';
+  import { LibSQLStore } from '@mastra/libsql';
+
+  export const mastra = new Mastra({
+    storage: new LibSQLStore({ url: 'file:../mastra.db' }),
+    agents: { /* agent exports */ },
+    workflows: { /* workflow exports */ }
+  });
+  ```
+
+## **Agent Development Standards**
+
+- **Agent Structure**: Each agent should be a separate file in `src/mastra/agents/`
+- **Model Integration**: Use appropriate AI SDK packages (@ai-sdk/google, @ai-sdk/openai, etc.)
+- **Memory Management**: Implement proper memory and storage for agent state
+- **Error Handling**: Include comprehensive error handling and validation
+- **TypeScript**: Use strict TypeScript with proper type definitions
+
+## **Tool Development Standards**
+
+- **Tool Structure**: Each tool should be a separate file in `src/mastra/tools/`
+- **Input Validation**: Use Zod schemas for input/output validation
+- **Error Handling**: Implement proper error handling and logging
+- **Reusability**: Design tools to be modular and reusable
+- **Documentation**: Include clear documentation for tool usage
+
+## **Workflow Development Standards**
+
+- **Workflow Structure**: Each workflow should be a separate file in `src/mastra/workflows/`
+- **Step Definition**: Use `createStep` and `createWorkflow` from @mastra/core
+- **Schema Validation**: Implement proper input/output schemas with Zod
+- **Error Handling**: Include comprehensive error handling and recovery
+- **Progress Tracking**: Implement proper progress tracking and logging
+
+## **Schema and Type Safety**
+
+- **Zod Schemas**: Use Zod for all input/output validation
+- **TypeScript Interfaces**: Convert to Zod schemas for runtime validation
+- **Schema Organization**: Keep schemas in dedicated files or co-located with components
+- **Type Exports**: Export TypeScript types derived from Zod schemas
+
+## **Documentation Requirements**
+
+- **README.md**: Comprehensive template documentation
+  - Template overview and features
+  - Installation and setup instructions
+  - Usage examples and API documentation
+  - Configuration guide and troubleshooting
+
+- **Environment Variables**: Document all required environment variables
+- **Examples**: Provide sample data and usage examples
+- **API Reference**: Document all agents, tools, and workflows
+
+## **Testing and Validation**
+
+- **Template Installation**: Ensure template installs successfully
+- **Workflow Testing**: Test all workflows with sample data
+- **Agent Testing**: Validate all agent functionality
+- **Tool Testing**: Test all tools with various inputs
+- **Error Handling**: Validate error handling and recovery
+- **Performance**: Ensure reasonable performance and resource usage
+
+## **Best Practices**
+
+- **Modularity**: Keep components modular and focused
+- **Reusability**: Design for reuse across different projects
+- **Extensibility**: Allow for easy customization and extension
+- **Performance**: Optimize for reasonable resource usage
+- **Security**: Follow security best practices for API keys and data handling
+- **Compatibility**: Ensure compatibility with Mastra ecosystem
